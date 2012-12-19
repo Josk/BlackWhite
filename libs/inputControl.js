@@ -102,6 +102,16 @@ Keys.prototype.addEventOnMouseUp = function(varFunction){
 	}, false);
 };
 
+Keys.prototype.noKeyPress = function(){
+
+	for(var key in this.pressed){
+		if(this.pressed[key]){
+			return false;
+		}
+	}
+	return true;
+};
+
 
 
 
