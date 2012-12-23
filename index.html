@@ -40,6 +40,7 @@
 				var SCALE;
 				var world;
 				var keys;
+				var tank
 				
 				function init(){
 					
@@ -58,7 +59,7 @@
 					debugDraw.SetLineThickness(1.0);
 					debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_joinBit);
 					world.world.SetDebugDraw(debugDraw);
-					var tank = new Tank();
+					tank = new Tank();
 					tank.init(world.world);
 					copter = new Copter();
 					copter.init(world.world);
@@ -71,6 +72,8 @@
 					world.world.DrawDebugData();
 					world.world.ClearForces();
 					copter.Move(keys,b2Vec2);
+					tank.Move(b2Vec2);
+					tank.checkBorders(b2Vec2);
 					requestAnimFrame(run);
 					/*Time.currentTime = Date.now();
                    

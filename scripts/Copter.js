@@ -10,8 +10,8 @@ var Copter = function(){
 	this.fixDef.restitution = 0;
 	this.bodyDef.position.x = 100;
 	this.bodyDef.position.y = Math.random() * 100;
-	this.x;
-	this.y;
+	//this.x;
+	//this.y;
 	this.speedX = 0;
 	this.speedY = 0;
 	this.accelerationX = 1.5;
@@ -22,8 +22,8 @@ var Copter = function(){
 
 Copter.prototype.init = function(world) {
 	this.body = world.CreateBody(this.bodyDef).CreateFixture(this.fixDef).GetBody();
-	this.x = this.body.GetPosition().x;
-	this.y = this.body.GetPosition().y;
+	//this.x = this.body.GetPosition().x;
+	//this.y = this.body.GetPosition().y;
 };
 Copter.prototype.Move = function(keys,b2Vec2){
 
