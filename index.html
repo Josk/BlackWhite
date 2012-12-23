@@ -17,12 +17,13 @@
 			var b2Body = Box2D.Dynamics.b2Body;
 			var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 		</script>
-		<script src="scripts/Circle.js"></script>
-		<script src="scripts/Box.js"></script>
+		<script src="scripts/World.js"></script>
+		<script src="scripts/Tank.js"></script>
+		<script src="scripts/Copter.js"></script>
 		<script>
 			var canvas = document.getElementById("box2d-demo");
 			var ctx = canvas.getContext('2d');
-			var rec;
+			
 			window.onload = function(){
 				window.requestAnimFrame = (function(){
 				      return  window.requestAnimationFrame       || 
@@ -35,7 +36,7 @@
 				              };
 				})();
 
-			
+				var copter;
 				var SCALE;
 				var world;
 				var keys;
@@ -49,41 +50,27 @@
 					tab["up"] = [38];
 					tab["down"] = [40];
 					keys.init(tab,window);
-					world = new b2World(new b2Vec2(0,10), true);
-					SCALE = 30;
-
-					var fixDef = new b2FixtureDef;
-					fixDef.density = 1.0;
-					fixDef.friction = 0.5;
-					fixDef.restitution = 0.2;
-					var bodyDef = new b2BodyDef;
-					bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
-
-					bodyDef.position.x = canvas.width / 2 / SCALE;
-					bodyDef.position.y = (canvas.height / SCALE) - 1;
-					fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
-					fixDef.shape.SetAsBox((canvas.width / SCALE) / 2, 1);
-					world.CreateBody(bodyDef).CreateFixture(fixDef);
+					world = new World();
 					var debugDraw = new Box2D.Dynamics.b2DebugDraw;
 					debugDraw.SetSprite(ctx);
-					debugDraw.SetDrawScale(SCALE);
+					debugDraw.SetDrawScale(1);
 					debugDraw.SetFillAlpha(0.3);
 					debugDraw.SetLineThickness(1.0);
 					debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_joinBit);
-					world.SetDebugDraw(debugDraw);
-					var circle = new Circle();
-					circle.init(world);
-					rec = new Box();
-					rec.init(world);
+					world.world.SetDebugDraw(debugDraw);
+					var tank = new Tank();
+					tank.init(world.world);
+					copter = new Copter();
+					copter.init(world.world);
 
 				}
 				init();
 				run();
 				function run(){
-					world.Step(1/60,8,3);
-					world.DrawDebugData();
-					world.ClearForces();
-					rec.Move(keys,b2Vec2,SCALE);
+					world.world.Step(1/60,8,3);
+					world.world.DrawDebugData();
+					world.world.ClearForces();
+					copter.Move(keys,b2Vec2);
 					requestAnimFrame(run);
 					/*Time.currentTime = Date.now();
                    
