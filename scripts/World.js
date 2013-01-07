@@ -1,18 +1,29 @@
 var World = function(){
 
-	this.world = new b2World(new b2Vec2(0,10), true);
+	this.world = new b2World(new b2Vec2(0,100), true);
 	
 
-	this.fixDef = new b2FixtureDef;
-	this.fixDef.density = 1.0;
-	this.fixDef.friction = 0.5;
-	this.fixDef.restitution = 0.2;
-	this.bodyDef = new b2BodyDef;
-	this.bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
+	this.fixDefBot = new b2FixtureDef;
+	this.fixDefBot.density = 1.0;
+	this.fixDefBot.friction = 0.5;
+	this.fixDefBot.restitution = 0.2;
+	this.bodyDefBot = new b2BodyDef;
+	this.bodyDefBot.type = Box2D.Dynamics.b2Body.b2_staticBody;
+	this.bodyDefBot.position.x = canvas.width / 2;
+	this.bodyDefBot.position.y = (canvas.height) - 10;
+	this.fixDefBot.shape = new Box2D.Collision.Shapes.b2PolygonShape;
+	this.fixDefBot.shape.SetAsBox((canvas.width) / 2, 10);
+	this.world.CreateBody(this.bodyDefBot).CreateFixture(this.fixDefBot);
 
-	this.bodyDef.position.x = canvas.width / 2;
-	this.bodyDef.position.y = (canvas.height) - 10;
-	this.fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
-	this.fixDef.shape.SetAsBox((canvas.width) / 2, 10);
-	this.world.CreateBody(this.bodyDef).CreateFixture(this.fixDef);
+	this.fixDefTop = new b2FixtureDef;
+	this.fixDefTop.density = 1.0;
+	this.fixDefTop.friction = 0.5;
+	this.fixDefTop.restitution = 0.2;
+	this.bodyDefTop = new b2BodyDef;
+	this.bodyDefTop.type = Box2D.Dynamics.b2Body.b2_staticBody;
+	this.bodyDefTop.position.x = canvas.width / 2;
+	this.bodyDefTop.position.y = 0;
+	this.fixDefTop.shape = new Box2D.Collision.Shapes.b2PolygonShape;
+	this.fixDefTop.shape.SetAsBox((canvas.width) / 2, 10);
+	this.world.CreateBody(this.bodyDefTop).CreateFixture(this.fixDefTop);
 }
