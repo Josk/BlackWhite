@@ -5,7 +5,7 @@
 
 	</head>
 	<body>
-		<canvas id="box2d-demo" width="800" height="600"></canvas>
+		<canvas id="box2d-demo" width="300" height="600" ></canvas>
 		<script src="libs/Box2dWeb-2.1.a.3.js"></script>
 		<script src="libs/inputControl.js"></script>
 		<script>
@@ -16,6 +16,7 @@
 			var b2CircleShape = Box2D.Collision.Shapes.b2CircleShape;
 			var b2Body = Box2D.Dynamics.b2Body;
 			var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
+			var b2ContactListener = Box2D.Dynamics.b2ContactListener;
 		</script>
 		<script src="scripts/World.js"></script>
 		<script src="scripts/Floor.js"></script>
@@ -41,6 +42,7 @@
 				var floor;
 				var movingFloor;
 				var myFloors = new Array();
+				var collisionListener;
 				function init(){
 					
 					keys = new Keys();
@@ -61,9 +63,19 @@
 					floor = new Floor();
 					floor.Init(world.world,100);
 					movingFloor = floor;
+					collisionListener = new b2ContactListener;
+					world.world.SetContactListener(collisionListener);
 				}
 				init();
 				run();
+				document.body.onkeydown = function(event){
+					if(event.keyCode == 32){
+						movingFloor.StopMoving();
+					}
+				}
+				collisionListener.BeginContact = function(contact){
+					console.log(contact.GetFixtureB().GetBody());
+				}
 				function run(){
 					world.world.Step(1/60,8,3);
 					world.world.DrawDebugData();
