@@ -18,8 +18,7 @@
 			var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 		</script>
 		<script src="scripts/World.js"></script>
-		<script src="scripts/Tank.js"></script>
-		<script src="scripts/Copter.js"></script>
+		<script src="scripts/Floor.js"></script>
 		<script>
 			var canvas = document.getElementById("box2d-demo");
 			var ctx = canvas.getContext('2d');
@@ -39,8 +38,9 @@
 				var SCALE;
 				var world;
 				var keys;
-
-				
+				var floor;
+				var movingFloor;
+				var myFloors = new Array();
 				function init(){
 					
 					keys = new Keys();
@@ -58,7 +58,9 @@
 					debugDraw.SetLineThickness(1.0);
 					debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_joinBit);
 					world.world.SetDebugDraw(debugDraw);
-
+					floor = new Floor();
+					floor.Init(world.world,100);
+					movingFloor = floor;
 				}
 				init();
 				run();
@@ -66,9 +68,8 @@
 					world.world.Step(1/60,8,3);
 					world.world.DrawDebugData();
 					world.world.ClearForces();
-					
 					requestAnimFrame(run);
-
+					movingFloor.Move();
 				}
 			}
 		</script>
