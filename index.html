@@ -74,14 +74,25 @@
 					}
 				}
 				collisionListener.BeginContact = function(contact){
-					console.log(contact.GetFixtureB().GetBody());
+					//console.log(contact.GetFixtureB().GetBody().GetUserData());
+					if((contact.GetFixtureA().GetBody().GetUserData().type == "world" && contact.GetFixtureB().GetBody().GetUserData().type == "floor")
+						|| (contact.GetFixtureA().GetBody().GetUserData().type == "floor" && contact.GetFixtureB().GetBody().GetUserData().type == "floor")
+						|| (contact.GetFixtureB().GetBody().GetUserData().type == "world" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")
+						|| (contact.GetFixtureB().GetBody().GetUserData().type == "floor" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")){
+							myFloors.push(movingFloor);
+							movingFloor = null;
+							var newFloor = new Floor();
+							newFloor.Init(world.world,100);
+							movingFloor = newFloor;
+						}
 				}
 				function run(){
 					world.world.Step(1/60,8,3);
 					world.world.DrawDebugData();
 					world.world.ClearForces();
 					requestAnimFrame(run);
-					movingFloor.Move();
+					if(movingFloor != null)
+						movingFloor.Move();
 				}
 			}
 		</script>

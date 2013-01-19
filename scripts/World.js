@@ -13,8 +13,8 @@ var World = function(){
 	this.bodyDefBot.position.y = (canvas.height) - 10;
 	this.fixDefBot.shape = new Box2D.Collision.Shapes.b2PolygonShape;
 	this.fixDefBot.shape.SetAsBox((canvas.width) / 2, 10);
+	this.bodyDefBot.userData = {type: "world"};
 	this.world.CreateBody(this.bodyDefBot).CreateFixture(this.fixDefBot);
-
 	/*this.fixDefTop = new b2FixtureDef;
 	this.fixDefTop.density = 1.0;
 	this.fixDefTop.friction = 0.5;
