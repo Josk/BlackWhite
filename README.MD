@@ -1,3 +1,2 @@
 This project uses Box2DWeb.
-BlackWhite is a basic shooter.
-More informations soon.
+BlackWhite is a tower building game

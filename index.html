@@ -36,11 +36,10 @@
 				              };
 				})();
 
-				var copter;
 				var SCALE;
 				var world;
 				var keys;
-				var tank
+
 				
 				function init(){
 					
@@ -59,10 +58,6 @@
 					debugDraw.SetLineThickness(1.0);
 					debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_joinBit);
 					world.world.SetDebugDraw(debugDraw);
-					tank = new Tank();
-					tank.init(world.world);
-					copter = new Copter();
-					copter.init(world.world);
 
 				}
 				init();
@@ -71,18 +66,9 @@
 					world.world.Step(1/60,8,3);
 					world.world.DrawDebugData();
 					world.world.ClearForces();
-					copter.Move(keys,b2Vec2);
-					tank.Move(b2Vec2);
-					tank.checkBorders(b2Vec2);
+					
 					requestAnimFrame(run);
-					/*Time.currentTime = Date.now();
-                   
-					if ( Time.currentTime - Time.lastRender < 16 ) // 60 FPS max
-					{
-					       return;
-					}
-					Time.lastRender = Time.currentTime;
-					Time.update( Time.currentTime );*/
+
 				}
 			}
 		</script>
