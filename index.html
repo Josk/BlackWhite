@@ -43,6 +43,8 @@
 				var movingFloor;
 				var myFloors = new Array();
 				var collisionListener;
+				var createNewFloor = false;
+				var spawnDate = Date.now();
 				function init(){
 					
 					keys = new Keys();
@@ -79,11 +81,12 @@
 						|| (contact.GetFixtureA().GetBody().GetUserData().type == "floor" && contact.GetFixtureB().GetBody().GetUserData().type == "floor")
 						|| (contact.GetFixtureB().GetBody().GetUserData().type == "world" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")
 						|| (contact.GetFixtureB().GetBody().GetUserData().type == "floor" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")){
-							myFloors.push(movingFloor);
-							movingFloor = null;
-							var newFloor = new Floor();
-							newFloor.Init(world.world,100);
-							movingFloor = newFloor;
+							if(Date.now() - spawnDate >= 500){
+								myFloors.push(movingFloor);
+								movingFloor = null;
+								createNewFloor = true;
+								spawnDate = Date.now();
+							}
 						}
 				}
 				function run(){
@@ -91,9 +94,30 @@
 					world.world.DrawDebugData();
 					world.world.ClearForces();
 					requestAnimFrame(run);
+					if(createNewFloor){
+						var newFloor = new Floor();
+						newFloor.Init(world.world,100);
+						movingFloor = newFloor;
+						createNewFloor = false;
+					}
 					if(movingFloor != null)
 						movingFloor.Move();
+					CheckSizeOfTower();
 				}
+
+				function CheckSizeOfTower(){
+					if(myFloors.length > 0){
+						if(myFloors[myFloors.length-1].body.GetPosition().y < canvas.height/2){
+
+							console.log("too high");
+						}
+					}
+				}
+				function CheckEnd(){
+
+					
+				}
+
 			}
 		</script>
 	</body>
