@@ -44,7 +44,6 @@
 				var myFloors = new Array();
 				var collisionListener;
 				var createNewFloor = false;
-				var spawnDate = Date.now();
 				function init(){
 					
 					keys = new Keys();
@@ -81,13 +80,14 @@
 						|| (contact.GetFixtureA().GetBody().GetUserData().type == "floor" && contact.GetFixtureB().GetBody().GetUserData().type == "floor")
 						|| (contact.GetFixtureB().GetBody().GetUserData().type == "world" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")
 						|| (contact.GetFixtureB().GetBody().GetUserData().type == "floor" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")){
-							if(Date.now() - spawnDate >= 500){
-								myFloors.push(movingFloor);
-								movingFloor = null;
-								createNewFloor = true;
-								spawnDate = Date.now();
-							}
+						if(!contact.GetFixtureA().GetBody().GetUserData().isDropped || !contact.GetFixtureB().GetBody().GetUserData().isDropped){
+							console.log("AddFloor");
+							if(myFloors.length > 0)
+								myFloors[myFloors.length-1].body.GetUserData().isDropped = true;
+							myFloors.push(movingFloor);
+							createNewFloor = true;
 						}
+					}
 				}
 				function run(){
 					world.world.Step(1/60,8,3);
@@ -102,7 +102,7 @@
 					}
 					if(movingFloor != null)
 						movingFloor.Move();
-					CheckSizeOfTower();
+					//CheckSizeOfTower();
 				}
 
 				function CheckSizeOfTower(){
@@ -115,7 +115,7 @@
 				}
 				function CheckEnd(){
 
-					
+
 				}
 
 			}

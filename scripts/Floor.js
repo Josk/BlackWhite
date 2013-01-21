@@ -14,7 +14,7 @@ var Floor = function(){
 	this.bodyDef.position.y = 100;
 	this.movingFactor;
 	this.isMoving = true;
-	this.bodyDef.userData = {type: "floor"};
+	this.bodyDef.userData = {type: "floor", isDropped: false};
 }
 
 Floor.prototype.Init = function(world,factor) {
