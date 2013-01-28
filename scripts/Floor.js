@@ -4,7 +4,7 @@ var Floor = function(){
 	this.fixDef = new b2FixtureDef;
 	this.bodyDef.type = b2Body.b2_dynamicBody;
 	this.fixDef.shape = new b2PolygonShape;
-	this.width = Math.random()*100+10;
+	this.width = Math.random()*70+30;
 	this.height = Math.random()*20+10;
 	this.fixDef.shape.SetAsBox(this.width,this.height);
 	this.fixDef.density = 1;

@@ -80,11 +80,10 @@
 						|| (contact.GetFixtureA().GetBody().GetUserData().type == "floor" && contact.GetFixtureB().GetBody().GetUserData().type == "floor")
 						|| (contact.GetFixtureB().GetBody().GetUserData().type == "world" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")
 						|| (contact.GetFixtureB().GetBody().GetUserData().type == "floor" && contact.GetFixtureA().GetBody().GetUserData().type == "floor")){
-						if(!contact.GetFixtureA().GetBody().GetUserData().isDropped || !contact.GetFixtureB().GetBody().GetUserData().isDropped){
+						if((!contact.GetFixtureA().GetBody().GetUserData().isDropped || !contact.GetFixtureB().GetBody().GetUserData().isDropped) && !(!contact.GetFixtureA().GetBody().GetUserData().isDropped && !contact.GetFixtureB().GetBody().GetUserData().isDropped)){
 							console.log("AddFloor");
-							if(myFloors.length > 0)
-								myFloors[myFloors.length-1].body.GetUserData().isDropped = true;
 							myFloors.push(movingFloor);
+							myFloors[myFloors.length-1].body.GetUserData().isDropped = true;
 							createNewFloor = true;
 						}
 					}
@@ -102,13 +101,16 @@
 					}
 					if(movingFloor != null)
 						movingFloor.Move();
-					//CheckSizeOfTower();
+					CheckSizeOfTower();
 				}
 
 				function CheckSizeOfTower(){
 					if(myFloors.length > 0){
 						if(myFloors[myFloors.length-1].body.GetPosition().y < canvas.height/2){
-
+							world.body.SetPosition(new b2Vec2(world.body.GetPosition().x,world.body.GetPosition().y+100));
+							for(var i = 0; i < myFloors.length;i++){
+								myFloors[i].body.SetPosition(new b2Vec2(myFloors[i].body.GetPosition().x,myFloors[i].body.GetPosition().y+100))
+							}
 							console.log("too high");
 						}
 					}
