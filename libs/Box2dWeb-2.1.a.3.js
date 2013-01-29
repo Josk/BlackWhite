@@ -10798,8 +10798,8 @@ Box2D.postDefs = [];
       var s = this.m_ctx;
       var drawScale = this.m_drawScale;
       s.beginPath();
-      s.strokeStyle = this._color(color.color, this.m_alpha);
-      s.fillStyle = this._color(color.color, this.m_fillAlpha);
+      s.strokeStyle = this._color("white", 1);
+      s.fillStyle = this._color("black", 1);
       s.moveTo(vertices[0].x * drawScale, vertices[0].y * drawScale);
       for (var i = 1; i < vertexCount; i++) {
          s.lineTo(vertices[i].x * drawScale, vertices[i].y * drawScale);
