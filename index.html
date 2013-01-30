@@ -1,11 +1,13 @@
 <html>
 	<head>
-		<title></title>
+		<title>BlackWhite</title>
 		<link type="text/css" rel="stylesheet" href="css/style.css">
+
 
 	</head>
 	<body>
 		<canvas id="box2d-demo" width="300" height="600" ></canvas>
+
 		<script src="libs/Box2dWeb-2.1.a.3.js"></script>
 		<script src="libs/inputControl.js"></script>
 		<script>
@@ -18,8 +20,11 @@
 			var b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 			var b2ContactListener = Box2D.Dynamics.b2ContactListener;
 		</script>
+		<script src="scripts/Menu.js"></script>
 		<script src="scripts/World.js"></script>
 		<script src="scripts/Floor.js"></script>
+		<script src="scripts/Score.js"></script>
+		<script src="scripts/HUD.js"></script>
 		<script>
 			var canvas = document.getElementById("box2d-demo");
 			var ctx = canvas.getContext('2d');
@@ -41,9 +46,17 @@
 				var keys;
 				var floor;
 				var movingFloor;
-				var myFloors = new Array();
+				var myFloors;
 				var collisionListener;
 				var createNewFloor = false;
+				var displayMenu = true;
+				var isInited = false;
+				var menu;
+				var isMenuInited;
+				var hud;
+				var score;
+				var stopMoving;
+				var endGame;
 				function init(){
 					
 					keys = new Keys();
@@ -66,15 +79,12 @@
 					movingFloor = floor;
 					collisionListener = new b2ContactListener;
 					world.world.SetContactListener(collisionListener);
-				}
-				init();
-				run();
-				document.body.onkeydown = function(event){
-					if(event.keyCode == 32){
-						movingFloor.StopMoving();
-					}
-				}
-				collisionListener.BeginContact = function(contact){
+					hud = new HUD();
+					score = new Score();
+					stopMoving = false;
+					endGame = false;
+					myFloors = new Array()
+					collisionListener.BeginContact = function(contact){
 					//console.log(contact.GetFixtureB().GetBody().GetUserData());
 					if((contact.GetFixtureA().GetBody().GetUserData().type == "world" && contact.GetFixtureB().GetBody().GetUserData().type == "floor")
 						|| (contact.GetFixtureA().GetBody().GetUserData().type == "floor" && contact.GetFixtureB().GetBody().GetUserData().type == "floor")
@@ -86,22 +96,79 @@
 							myFloors[myFloors.length-1].body.GetUserData().isDropped = true;
 							createNewFloor = true;
 						}
+						if(myFloors.length > 1){
+							if(contact.GetFixtureA().GetBody() == myFloors[myFloors.length-1].body || contact.GetFixtureB().GetBody() == myFloors[myFloors.length-1].body){
+								if(contact.GetFixtureA().GetBody().GetUserData().type == "world" || contact.GetFixtureB().GetBody().GetUserData().type == "world"){
+
+									if(!endGame)
+										endGame = true;
+
+								}
+							}
+
+						}
 					}
 				}
-				function run(){
-					world.world.Step(1/60,8,3);
-					world.world.DrawDebugData();
-					world.world.ClearForces();
-					requestAnimFrame(run);
-					if(createNewFloor){
-						var newFloor = new Floor();
-						newFloor.Init(world.world,100);
-						movingFloor = newFloor;
-						createNewFloor = false;
+				isInited = true;
+				}
+				
+				run();
+				document.body.onkeydown = function(event){
+					if(event.keyCode == 32){
+						if(!endGame){
+							movingFloor.StopMoving();
+							stopMoving = true;
+						}
 					}
-					if(movingFloor != null)
-						movingFloor.Move();
-					CheckSizeOfTower();
+					if(event.keyCode == 13){
+						displayMenu = false;
+					}
+					if(event.keyCode == 27){
+						displayMenu = true;
+						isMenuInited = false;
+						isInited = false;
+					}
+				}
+				function initMenu(){
+					menu = new Menu();
+					isMenuInited = true;
+
+				}
+				function run(){
+					if(displayMenu){
+						if(!isMenuInited)
+							initMenu();
+						menu.render();
+						menu.Blink();
+					}else{
+						if(!isInited)
+							init();
+						world.world.Step(1/60,8,3);
+						world.world.DrawDebugData();
+						world.world.ClearForces();
+						if(createNewFloor){
+							var newFloor = new Floor();
+							newFloor.Init(world.world,100);
+							movingFloor = newFloor;
+							createNewFloor = false;
+							score.IncrementScore(100);
+						}
+						if(movingFloor != null && !endGame)
+							movingFloor.Move();
+						CheckSizeOfTower();
+						if(CheckEnd()){
+							if(!endGame)
+								endGame = true;
+						}
+
+						if(endGame && movingFloor.body != null){
+							var bodyFloor = movingFloor.body;
+							world.world.DestroyBody(bodyFloor);
+
+						}
+						hud.render(score.score,myFloors.length,stopMoving,endGame);
+					}
+					requestAnimFrame(run);
 				}
 
 				function CheckSizeOfTower(){
@@ -116,7 +183,16 @@
 					}
 				}
 				function CheckEnd(){
-
+					if(myFloors.length > 0 && myFloors[myFloors.length-1].body.GetPosition().y > canvas.height){
+						return true;
+					}
+					if(myFloors.length > 1 && myFloors[myFloors.length-2].body.GetPosition().y > canvas.height){
+						return true;
+					}
+					if(myFloors.length > 2 && myFloors[myFloors.length-3].body.GetPosition().y > canvas.height){
+						return true;
+					}
+					return false;
 
 				}
 
