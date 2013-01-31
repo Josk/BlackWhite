@@ -15,6 +15,10 @@ Menu.prototype.render = function() {
 	ctx.fillRect(0,canvas.height/2,canvas.width,canvas.height/2);
 	ctx.fillStyle = "white";
 	ctx.fillText("WHITE",canvas.width/2,canvas.height/2+100);
+	ctx.font = "15pt SilkscreenNormal";
+	ctx.fillText("Tower Builder",canvas.width/2,canvas.height-130);
+	ctx.fillText("Stack the blocks",canvas.width/2,canvas.height-100);
+
 };
 
 Menu.prototype.Blink = function() {
