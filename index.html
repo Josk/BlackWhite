@@ -85,7 +85,7 @@
 					debugDraw.SetLineThickness(1.0);
 					debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_joinBit);
 					world.world.SetDebugDraw(debugDraw);
-					floor = new Floor(100,30);
+					floor = new Floor(80,15);
 					floor.Init(world.world,100);
 					movingFloor = floor;
 					collisionListener = new b2ContactListener;
